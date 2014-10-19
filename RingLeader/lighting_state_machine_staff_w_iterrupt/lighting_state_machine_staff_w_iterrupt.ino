@@ -1,5 +1,7 @@
+#include <elapsedMillis.h> //https://github.com/pfeerick/elapsedMillis/archive/master.zip
 #include <SM.h>  //http://playground.arduino.cc/Code/SMlib
 #include <Adafruit_NeoPixel.h> 
+
 
 SM Simple(S1);
 
@@ -8,6 +10,7 @@ SM Simple(S1);
 #define D3 2
 #define D4 3
 #define NUM_LEDS 441// 147 LED per side
+#define LEDS_PER_SIDE 147 
 #define DATA_PIN 4 //output pin on ATTiny85
 //#define BTN_PIN 0 //input pin on ATTiny85
 //#define BTN_DELAY 250 //add delay for debounce
@@ -37,6 +40,14 @@ volatile unsigned long last_micros;
 
 // states
 boolean shouldFlipState = false;
+
+
+//animation
+int animationStep = 0;
+int animationStepsMax = NUM_LEDS / 3;
+elapsedMillis animationFrameElapsed = 0;
+long animationFrameDurationMs = 100;
+
 
 void setup(){
   pinMode(D1, INPUT);
@@ -139,17 +150,18 @@ State S2(){
 }
 
 State S3(){
-  // low fade red
-  for (uint16_t b = 5; b< 30; b++) {
-    colorFast(strip.Color(b,0,0),15);
+  // odd fade
+  incrAnimationStep();
+  for (int i = 0; i < animationStep; i++) {
+    strip.setPixelColor(i, strip.Color(50,0,100));
+    strip.setPixelColor(i+LEDS_PER_SIDE, strip.Color(50,0,100));
+    strip.setPixelColor(i+LEDS_PER_SIDE+LEDS_PER_SIDE, strip.Color(50,0,100));
   }
-  stateread();
-  for (uint16_t b = 30; b> 5; b=b-1) {
-    colorFast(strip.Color(b,0,0),8);
-  }
-  stateread();
-
+  strip.show();
+  nextState(S0);
+  return;
 }
+
 State S4(){
   // low red flashfade
   for (uint16_t b = 0; b< 20; b++) {
@@ -314,5 +326,16 @@ void nextState(Pstate nextState) {
   }
   return;
 }
+
+void incrAnimationStep() {
+  if (animationFrameElapsed > animationFrameDurationMs) {
+    animationFrameElapsed = 0;
+    animationStep++;
+    animationStep = animationStep % animationStepsMax;
+  }
+  return; 
+}
+
+
 
 
