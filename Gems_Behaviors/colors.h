@@ -1,0 +1,26 @@
+
+#ifndef H_COLOR
+#define H_COLOR
+
+#include <Adafruit_NeoPixel.h>
+
+/*
+uint32_t color[] = {
+  strip.Color(0xFF, 0x00, 0xcc),
+  strip.Color(0x00, 0xFF, 0x44),
+  
+    strip.Color(0x50, 0x86, 0x79),
+  strip.Color(0xE6, 0xE6, 0xFA),
+  strip.Color(0xD6, 0xAE, 0xDA),
+  
+  strip.Color(0xF9, 0xF1, 0xFE),
+  strip.Color(0xF1, 0xBA, 0x46)
+};
+
+*/
+
+//int colorCount = 8;
+
+#endif // H_GEM
+
+
